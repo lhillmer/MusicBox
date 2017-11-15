@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>title</title>
+		<script>
+			var dump = {{ status_dump }}
+		</script>
+	</head>
+	<body>
+		<h3>Status</h3>
+		<ul>
+			<li>State:  {{ status.state }}</li>
+			<li>Volume: {{ status.volume }}</li>
+			<li>Current Song: '{{ current_song['title'] }} ' by {{ current_song['artist'] }}</li>
+			<li>Error: {% if status.error %} {{ status.error }} {% else %}None{% endif %}</li>
+		</ul>
+	</body>
+</html>
