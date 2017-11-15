@@ -11,6 +11,7 @@ class MPDWrapper:
         self.client = MPDClient()
         self.client.timeout = 10
         self.client.connect(self.address, self.port)
+        return self
 
     def __exit__(self, type, value, traceback):
         self.client.close()
@@ -33,6 +34,9 @@ class MPDWrapper:
 
     def next_song(self):
         self.client.next()
+
+    def prev_song(self):
+        self.client.previous()
 
     def play(self):
         self.client.play()
