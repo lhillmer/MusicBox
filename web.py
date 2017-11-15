@@ -16,11 +16,13 @@ def get_artists():
 
 @app.route("/status")
 def get_status():
-    status = client.get_status()
+    with client as active_client:
+        status = client.get_status()
+        current_song = client.get_playlist_song_by_id(status['songid'])[0]
     return render_template('status.html',
             status=status,
             status_dump=json.dumps(status),
-            current_song=client.get_playlist_song_by_id(status['songid'])[0])
+            current_song=current_song)
 
 if __name__ == "__main__":
     app.run()

@@ -1,13 +1,5 @@
 from mpd import MPDClient
 
-def refresh_client(func):
-    def wrapper(*args):
-        args[0]._new_client()
-        result = func(*args)
-        args[0]._close_client()
-        return result
-    return wrapper
-
 class MPDWrapper:
 
     def __init__(self, address = "localhost", port = 6600):
@@ -15,19 +7,39 @@ class MPDWrapper:
         self.port = port
         self.client = None
     
-    def _new_client(self):
+    def __enter__(self):
         self.client = MPDClient()
         self.client.timeout = 10
         self.client.connect(self.address, self.port)
 
-    def _close_client(self):
+    def __exit__(self, type, value, traceback):
         self.client.close()
         self.client.disconnect()
 
-    @refresh_client
     def get_status(self):
         return self.client.status()
     
-    @refresh_client
     def get_playlist_song_by_id(self, song_id):
         return self.client.playlistid(song_id)
+
+    def set_volume(self, vol):
+        self.client.setvol(vol)
+        
+    def set_repeat(self, new_state):
+        self.client.repeat(new_state)
+
+    def set_random(self, new_state):
+        self.client.repeat(new_state)
+
+    def next_song(self):
+        self.client.next()
+
+    def play(self):
+        self.client.play()
+
+    def pause(self):
+        self.client.pause()
+
+    def stop(self):
+        self.client.stop()
+
